@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kompresi Foto Online</title>
+    <title>Kompresi Foto Online & Konversi WebP ke JPG</title>
     <style>
         * {
             margin: 0;
@@ -20,7 +20,7 @@
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             background-color: white;
             border-radius: 15px;
@@ -43,6 +43,23 @@
         .subtitle {
             font-size: 1.1rem;
             opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .feature-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
         }
         
         .main-content {
@@ -132,6 +149,29 @@
             font-weight: 600;
             color: #6a11cb;
             min-width: 40px;
+        }
+        
+        .format-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .format-option {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .format-option.active {
+            border-color: #6a11cb;
+            background-color: #f0f4ff;
+            color: #6a11cb;
+            font-weight: 600;
         }
         
         .btn {
@@ -240,6 +280,16 @@
             margin-top: 10px;
         }
         
+        .webp-notice {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #fff8e6;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+        }
+        
         footer {
             text-align: center;
             padding: 20px;
@@ -253,6 +303,11 @@
                 border-right: none;
                 border-bottom: 1px solid #eee;
             }
+            
+            .features {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
@@ -260,7 +315,13 @@
     <div class="container">
         <header>
             <h1>Kompresi Foto Online</h1>
-            <p class="subtitle">Ubah ukuran foto tanpa mengurangi kualitas secara signifikan</p>
+            <p class="subtitle">Kompres gambar dan konversi format WebP ke JPG dengan mudah. Ubah ukuran foto tanpa mengurangi kualitas secara signifikan.</p>
+            <div class="features">
+                <div class="feature-badge">Kompresi Gambar</div>
+                <div class="feature-badge">Konversi WebP ke JPG</div>
+                <div class="feature-badge">Optimasi Ukuran File</div>
+                <div class="feature-badge">Tanpa Unggah ke Server</div>
+            </div>
         </header>
         
         <div class="main-content">
@@ -290,7 +351,16 @@
                         </div>
                     </div>
                     
-                    <button class="btn" id="compressBtn" disabled>Kompres Foto</button>
+                    <div class="control-group">
+                        <label>Format Output</label>
+                        <div class="format-options">
+                            <div class="format-option active" data-format="jpeg">JPG</div>
+                            <div class="format-option" data-format="png">PNG</div>
+                            <div class="format-option" data-format="webp">WebP</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn" id="compressBtn" disabled>Proses Gambar</button>
                 </div>
             </div>
             
@@ -309,6 +379,10 @@
                         <span id="fileName" class="info-value">-</span>
                     </div>
                     <div class="info-row">
+                        <span class="info-label">Format Asli:</span>
+                        <span id="fileFormat" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
                         <span class="info-label">Ukuran Asli:</span>
                         <span id="fileSize" class="info-value">-</span>
                     </div>
@@ -318,8 +392,16 @@
                     </div>
                 </div>
                 
+                <div class="webp-notice" id="webpNotice">
+                    <strong>File WebP Terdeteksi!</strong> File ini akan dikonversi ke format JPG secara otomatis.
+                </div>
+                
                 <div class="compression-result" id="compressionResult">
-                    <div class="success-message">Kompresi Berhasil!</div>
+                    <div class="success-message">Pemrosesan Berhasil!</div>
+                    <div class="info-row">
+                        <span class="info-label">Format Baru:</span>
+                        <span id="newFileFormat" class="info-value">-</span>
+                    </div>
                     <div class="info-row">
                         <span class="info-label">Ukuran Baru:</span>
                         <span id="newFileSize" class="info-value">-</span>
@@ -334,7 +416,7 @@
         </div>
         
         <footer>
-            <p>© 2023 Kompresi Foto Online - @mas eko cakep</p>
+            <p>© 2023 Kompresi Foto Online - Alat kompresi gambar gratis dan mudah digunakan</p>
         </footer>
     </div>
 
@@ -347,20 +429,26 @@
         const previewImage = document.getElementById('previewImage');
         const previewPlaceholder = document.getElementById('previewPlaceholder');
         const fileName = document.getElementById('fileName');
+        const fileFormat = document.getElementById('fileFormat');
         const fileSize = document.getElementById('fileSize');
         const fileDimensions = document.getElementById('fileDimensions');
         const qualitySlider = document.getElementById('qualitySlider');
         const qualityValue = document.getElementById('qualityValue');
         const sizeSlider = document.getElementById('sizeSlider');
         const sizeValue = document.getElementById('sizeValue');
+        const formatOptions = document.querySelectorAll('.format-option');
         const compressionResult = document.getElementById('compressionResult');
+        const newFileFormat = document.getElementById('newFileFormat');
         const newFileSize = document.getElementById('newFileSize');
         const reduction = document.getElementById('reduction');
         const downloadBtn = document.getElementById('downloadBtn');
+        const webpNotice = document.getElementById('webpNotice');
         
         // Variabel global untuk menyimpan data gambar
         let originalImage = null;
         let originalFileSize = 0;
+        let originalFormat = '';
+        let selectedFormat = 'jpeg';
         
         // Event Listeners
         browseBtn.addEventListener('click', () => fileInput.click());
@@ -393,13 +481,22 @@
             sizeValue.textContent = `${sizeSlider.value}px`;
         });
         
-        compressBtn.addEventListener('click', compressImage);
+        // Format option selection
+        formatOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                formatOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                selectedFormat = option.getAttribute('data-format');
+            });
+        });
+        
+        compressBtn.addEventListener('click', processImage);
         
         // Fungsi untuk menangani file yang dipilih
         function handleFile(file) {
             // Validasi tipe file
             if (!file.type.match('image.*')) {
-                alert('Silakan pilih file gambar (JPG, PNG, GIF, dll.)');
+                alert('Silakan pilih file gambar (JPG, PNG, GIF, WebP, dll.)');
                 return;
             }
             
@@ -410,10 +507,27 @@
             }
             
             originalFileSize = file.size;
+            originalFormat = file.type.split('/')[1].toLowerCase();
             
             // Tampilkan informasi file
             fileName.textContent = file.name;
+            fileFormat.textContent = originalFormat.toUpperCase();
             fileSize.textContent = formatFileSize(file.size);
+            
+            // Tampilkan notifikasi khusus untuk WebP
+            if (originalFormat === 'webp') {
+                webpNotice.style.display = 'block';
+                // Otomatis pilih format JPG untuk konversi
+                formatOptions.forEach(opt => {
+                    opt.classList.remove('active');
+                    if (opt.getAttribute('data-format') === 'jpeg') {
+                        opt.classList.add('active');
+                        selectedFormat = 'jpeg';
+                    }
+                });
+            } else {
+                webpNotice.style.display = 'none';
+            }
             
             // Baca dan tampilkan gambar
             const reader = new FileReader();
@@ -434,8 +548,8 @@
             reader.readAsDataURL(file);
         }
         
-        // Fungsi untuk mengompresi gambar
-        function compressImage() {
+        // Fungsi untuk memproses gambar (kompresi dan/atau konversi)
+        function processImage() {
             if (!originalImage) return;
             
             const canvas = document.createElement('canvas');
@@ -457,22 +571,42 @@
             // Gambar ulang gambar dengan kualitas yang ditentukan
             ctx.drawImage(originalImage, 0, 0, width, height);
             
-            // Dapatkan data gambar yang dikompresi
-            const quality = parseInt(qualitySlider.value) / 100;
-            const compressedDataURL = canvas.toDataURL('image/jpeg', quality);
+            // Tentukan format output dan quality
+            let mimeType, fileExtension;
+            switch(selectedFormat) {
+                case 'png':
+                    mimeType = 'image/png';
+                    fileExtension = 'png';
+                    break;
+                case 'webp':
+                    mimeType = 'image/webp';
+                    fileExtension = 'webp';
+                    break;
+                case 'jpeg':
+                default:
+                    mimeType = 'image/jpeg';
+                    fileExtension = 'jpg';
+                    break;
+            }
+            
+            // Dapatkan data gambar yang diproses
+            const quality = selectedFormat === 'png' ? 1 : parseInt(qualitySlider.value) / 100;
+            const processedDataURL = canvas.toDataURL(mimeType, quality);
             
             // Hitung ukuran file baru
-            const base64String = compressedDataURL.split(',')[1];
-            const compressedSize = Math.round((base64String.length * 3) / 4);
+            const base64String = processedDataURL.split(',')[1];
+            const processedSize = Math.round((base64String.length * 3) / 4);
             
-            // Tampilkan hasil kompresi
-            newFileSize.textContent = formatFileSize(compressedSize);
-            const reductionPercent = ((originalFileSize - compressedSize) / originalFileSize * 100).toFixed(1);
+            // Tampilkan hasil pemrosesan
+            newFileFormat.textContent = selectedFormat.toUpperCase();
+            newFileSize.textContent = formatFileSize(processedSize);
+            const reductionPercent = ((originalFileSize - processedSize) / originalFileSize * 100).toFixed(1);
             reduction.textContent = `${reductionPercent}% lebih kecil`;
             
             // Siapkan tautan unduhan
-            downloadBtn.href = compressedDataURL;
-            downloadBtn.download = `compressed_${fileName.textContent.split('.')[0]}.jpg`;
+            const originalName = fileName.textContent.split('.')[0];
+            downloadBtn.href = processedDataURL;
+            downloadBtn.download = `processed_${originalName}.${fileExtension}`;
             
             // Tampilkan hasil kompresi
             compressionResult.style.display = 'block';
