@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kompresi Foto Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 30px;
+        }
+        
+        .upload-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            border-right: 1px solid #eee;
+        }
+        
+        .preview-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+        }
+        
+        .upload-area {
+            border: 2px dashed #6a11cb;
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area:hover {
+            background-color: #f9f7ff;
+            border-color: #2575fc;
+        }
+        
+        .upload-icon {
+            font-size: 50px;
+            color: #6a11cb;
+            margin-bottom: 15px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .controls {
+            margin-top: 20px;
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .slider {
+            flex: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            background: #e0e0e0;
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #6a11cb;
+            cursor: pointer;
+        }
+        
+        .slider-value {
+            margin-left: 15px;
+            font-weight: 600;
+            color: #6a11cb;
+            min-width: 40px;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .preview-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 250px;
+            display: none;
+        }
+        
+        .preview-placeholder {
+            text-align: center;
+            color: #888;
+        }
+        
+        .preview-placeholder i {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+        
+        .file-info {
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .info-label {
+            font-weight: 600;
+        }
+        
+        .info-value {
+            color: #6a11cb;
+        }
+        
+        .compression-result {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-radius: 8px;
+            border-left: 4px solid #2575fc;
+        }
+        
+        .success-message {
+            color: #2575fc;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .upload-section {
+                border-right: none;
+                border-bottom: 1px solid #eee;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Kompresi Foto Online</h1>
+            <p class="subtitle">Ubah ukuran foto tanpa mengurangi kualitas secara signifikan</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📁</div>
+                    <h3>Seret & Jatuhkan Foto di Sini</h3>
+                    <p>atau</p>
+                    <button class="btn" id="browseBtn">Pilih File</button>
+                    <input type="file" id="fileInput" class="file-input" accept="image/*">
+                </div>
+                
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="qualitySlider">Kualitas Kompresi</label>
+                        <div class="slider-container">
+                            <input type="range" id="qualitySlider" class="slider" min="10" max="100" value="80">
+                            <span id="qualityValue" class="slider-value">80%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="sizeSlider">Ukuran Output (lebar maksimal)</label>
+                        <div class="slider-container">
+                            <input type="range" id="sizeSlider" class="slider" min="100" max="2000" value="1200">
+                            <span id="sizeValue" class="slider-value">1200px</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn" id="compressBtn" disabled>Kompres Foto</button>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <div class="preview-container">
+                    <img id="previewImage" class="preview-image" alt="Preview">
+                    <div class="preview-placeholder" id="previewPlaceholder">
+                        <i>🖼️</i>
+                        <p>Preview foto akan muncul di sini</p>
+                    </div>
+                </div>
+                
+                <div class="file-info">
+                    <div class="info-row">
+                        <span class="info-label">Nama File:</span>
+                        <span id="fileName" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Ukuran Asli:</span>
+                        <span id="fileSize" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Dimensi:</span>
+                        <span id="fileDimensions" class="info-value">-</span>
+                    </div>
+                </div>
+                
+                <div class="compression-result" id="compressionResult">
+                    <div class="success-message">Kompresi Berhasil!</div>
+                    <div class="info-row">
+                        <span class="info-label">Ukuran Baru:</span>
+                        <span id="newFileSize" class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Pengurangan:</span>
+                        <span id="reduction" class="info-value">-</span>
+                    </div>
+                    <a href="#" class="download-btn" id="downloadBtn">Unduh Foto</a>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Kompresi Foto Online - Alat kompresi gambar gratis dan mudah digunakan</p>
+        </footer>
+    </div>
+
+    <script>
+        // Elemen DOM
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const browseBtn = document.getElementById('browseBtn');
+        const compressBtn = document.getElementById('compressBtn');
+        const previewImage = document.getElementById('previewImage');
+        const previewPlaceholder = document.getElementById('previewPlaceholder');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const fileDimensions = document.getElementById('fileDimensions');
+        const qualitySlider = document.getElementById('qualitySlider');
+        const qualityValue = document.getElementById('qualityValue');
+        const sizeSlider = document.getElementById('sizeSlider');
+        const sizeValue = document.getElementById('sizeValue');
+        const compressionResult = document.getElementById('compressionResult');
+        const newFileSize = document.getElementById('newFileSize');
+        const reduction = document.getElementById('reduction');
+        const downloadBtn = document.getElementById('downloadBtn');
+        
+        // Variabel global untuk menyimpan data gambar
+        let originalImage = null;
+        let originalFileSize = 0;
+        
+        // Event Listeners
+        browseBtn.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.backgroundColor = '#f0f0ff';
+        });
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.backgroundColor = '';
+        });
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.backgroundColor = '';
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        });
+        
+        qualitySlider.addEventListener('input', () => {
+            qualityValue.textContent = `${qualitySlider.value}%`;
+        });
+        
+        sizeSlider.addEventListener('input', () => {
+            sizeValue.textContent = `${sizeSlider.value}px`;
+        });
+        
+        compressBtn.addEventListener('click', compressImage);
+        
+        // Fungsi untuk menangani file yang dipilih
+        function handleFile(file) {
+            // Validasi tipe file
+            if (!file.type.match('image.*')) {
+                alert('Silakan pilih file gambar (JPG, PNG, GIF, dll.)');
+                return;
+            }
+            
+            // Validasi ukuran file (maksimal 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('Ukuran file terlalu besar. Maksimal 10MB.');
+                return;
+            }
+            
+            originalFileSize = file.size;
+            
+            // Tampilkan informasi file
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            
+            // Baca dan tampilkan gambar
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    fileDimensions.textContent = `${img.width} × ${img.height} px`;
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                    previewPlaceholder.style.display = 'none';
+                    originalImage = img;
+                    
+                    // Aktifkan tombol kompresi
+                    compressBtn.disabled = false;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // Fungsi untuk mengompresi gambar
+        function compressImage() {
+            if (!originalImage) return;
+            
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Hitung dimensi baru
+            const maxWidth = parseInt(sizeSlider.value);
+            let width = originalImage.width;
+            let height = originalImage.height;
+            
+            if (width > maxWidth) {
+                height = (height * maxWidth) / width;
+                width = maxWidth;
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            // Gambar ulang gambar dengan kualitas yang ditentukan
+            ctx.drawImage(originalImage, 0, 0, width, height);
+            
+            // Dapatkan data gambar yang dikompresi
+            const quality = parseInt(qualitySlider.value) / 100;
+            const compressedDataURL = canvas.toDataURL('image/jpeg', quality);
+            
+            // Hitung ukuran file baru
+            const base64String = compressedDataURL.split(',')[1];
+            const compressedSize = Math.round((base64String.length * 3) / 4);
+            
+            // Tampilkan hasil kompresi
+            newFileSize.textContent = formatFileSize(compressedSize);
+            const reductionPercent = ((originalFileSize - compressedSize) / originalFileSize * 100).toFixed(1);
+            reduction.textContent = `${reductionPercent}% lebih kecil`;
+            
+            // Siapkan tautan unduhan
+            downloadBtn.href = compressedDataURL;
+            downloadBtn.download = `compressed_${fileName.textContent.split('.')[0]}.jpg`;
+            
+            // Tampilkan hasil kompresi
+            compressionResult.style.display = 'block';
+        }
+        
+        // Fungsi utilitas untuk memformat ukuran file
+        function formatFileSize(bytes) {
+            if (bytes < 1024) {
+                return bytes + ' bytes';
+            } else if (bytes < 1024 * 1024) {
+                return (bytes / 1024).toFixed(1) + ' KB';
+            } else {
+                return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+            }
+        }
+    </script>
+</body>
+</html>
