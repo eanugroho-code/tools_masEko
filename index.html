@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alat Edit foto mas eko</title>
-    <style>
+     <style>
         * {
             margin: 0;
             padding: 0;
@@ -326,7 +326,7 @@
             color: #856404;
         }
         
-        .remove-bg-info {
+        .remove-bg-info, .sharpen-info {
             margin-top: 20px;
             padding: 15px;
             background-color: #f0f8ff;
@@ -334,16 +334,16 @@
             border-left: 4px solid #2575fc;
         }
         
-        .remove-bg-info h3 {
+        .remove-bg-info h3, .sharpen-info h3 {
             color: #2575fc;
             margin-bottom: 10px;
         }
         
-        .remove-bg-info ul {
+        .remove-bg-info ul, .sharpen-info ul {
             padding-left: 20px;
         }
         
-        .remove-bg-info li {
+        .remove-bg-info li, .sharpen-info li {
             margin-bottom: 8px;
         }
         
@@ -407,7 +407,7 @@
             <p class="subtitle">Kompresi, konversi, dan hapus background foto dengan mudah dan cepat</p>
         </header>
         
-        <nav>
+         <nav>
             <div class="nav-container">
                 <button class="nav-btn active" data-page="compress">
                     <span>📁</span> Kompresi Foto
@@ -418,10 +418,13 @@
                 <button class="nav-btn" data-page="remove-bg">
                     <span>🧹</span> Hapus Background
                 </button>
+                <button class="nav-btn" data-page="sharpen">
+                    <span>🔍</span> Perjelas Gambar
+                </button>
             </div>
         </nav>
         
-        <!-- Halaman Kompresi Foto -->
+      <!-- Halaman Kompresi Foto -->
         <div class="page active" id="compress-page">
             <div class="main-content">
                 <div class="upload-section">
@@ -657,6 +660,102 @@
                     <div class="compression-result" id="removeBgResult">
                         <div class="success-message">Background Berhasil Dihapus!</div>
                         <a href="#" class="download-btn" id="removeBgDownloadBtn">Unduh Foto</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Perjelas Gambar (Sharpen) -->
+        <div class="page" id="sharpen-page">
+            <div class="main-content">
+                <div class="upload-section">
+                    <div class="upload-area" id="sharpenUploadArea">
+                        <div class="upload-icon">🔍</div>
+                        <h3>Seret & Jatuhkan Foto yang Buram</h3>
+                        <p>atau</p>
+                        <button class="btn" id="sharpenBrowseBtn">Pilih File</button>
+                        <input type="file" id="sharpenFileInput" class="file-input" accept="image/*">
+                    </div>
+                    
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="sharpenIntensitySlider">Intensitas Ketajaman</label>
+                            <div class="slider-container">
+                                <input type="range" id="sharpenIntensitySlider" class="slider" min="1" max="10" value="3">
+                                <span id="sharpenIntensityValue" class="slider-value">3</span>
+                            </div>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="sharpenRadiusSlider">Radius Ketajaman</label>
+                            <div class="slider-container">
+                                <input type="range" id="sharpenRadiusSlider" class="slider" min="0.1" max="2" step="0.1" value="0.8">
+                                <span id="sharpenRadiusValue" class="slider-value">0.8</span>
+                            </div>
+                        </div>
+                        
+                        <div class="control-group">
+                            <label>Format Output</label>
+                            <div class="format-options">
+                                <div class="format-option active" data-format="jpeg">JPG</div>
+                                <div class="format-option" data-format="png">PNG</div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn" id="sharpenBtn" disabled>Perjelas Gambar</button>
+                    </div>
+                    
+                    <div class="sharpen-info">
+                        <h3>Tips untuk Hasil Terbaik:</h3>
+                        <ul>
+                            <li>Gunakan intensitas rendah (1-3) untuk foto portrait</li>
+                            <li>Intensitas tinggi (7-10) untuk gambar teknis/diagram</li>
+                            <li>Radius kecil (0.1-0.5) untuk detail halus</li>
+                            <li>Radius besar (1.0-2.0) untuk efek keseluruhan</li>
+                            <li>Hindari over-sharpening yang menyebabkan noise</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="preview-section">
+                    <div class="comparison-container">
+                        <div class="comparison-box">
+                            <div class="comparison-title">Foto Asli (Buram)</div>
+                            <img id="sharpenOriginalImage" class="comparison-image" alt="Original" style="display: none;">
+                            <div class="preview-placeholder" id="sharpenOriginalPlaceholder">
+                                <i>🖼️</i>
+                                <p>Foto asli akan muncul di sini</p>
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-box">
+                            <div class="comparison-title">Hasil Sharpening (Tajam)</div>
+                            <img id="sharpenResultImage" class="comparison-image" alt="Result" style="display: none;">
+                            <div class="preview-placeholder" id="sharpenResultPlaceholder">
+                                <i>🔍</i>
+                                <p>Hasil sharpening akan muncul di sini</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="file-info">
+                        <div class="info-row">
+                            <span class="info-label">Nama File:</span>
+                            <span id="sharpenFileName" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Ukuran Asli:</span>
+                            <span id="sharpenFileSize" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Dimensi:</span>
+                            <span id="sharpenFileDimensions" class="info-value">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="compression-result" id="sharpenResult">
+                        <div class="success-message">Gambar Berhasil Diperjelas!</div>
+                        <a href="#" class="download-btn" id="sharpenDownloadBtn">Unduh Foto</a>
                     </div>
                 </div>
             </div>
@@ -1124,6 +1223,202 @@
             removeBgDownloadBtn.download = `no_bg_${originalName}.${fileExtension}`;
             
             removeBgResult.style.display = 'block';
+        }
+
+         // ========== KODE UNTUK HALAMAN SHARPEN GAMBAR ==========
+        const sharpenUploadArea = document.getElementById('sharpenUploadArea');
+        const sharpenFileInput = document.getElementById('sharpenFileInput');
+        const sharpenBrowseBtn = document.getElementById('sharpenBrowseBtn');
+        const sharpenBtn = document.getElementById('sharpenBtn');
+        const sharpenOriginalImage = document.getElementById('sharpenOriginalImage');
+        const sharpenOriginalPlaceholder = document.getElementById('sharpenOriginalPlaceholder');
+        const sharpenResultImage = document.getElementById('sharpenResultImage');
+        const sharpenResultPlaceholder = document.getElementById('sharpenResultPlaceholder');
+        const sharpenFileName = document.getElementById('sharpenFileName');
+        const sharpenFileSize = document.getElementById('sharpenFileSize');
+        const sharpenFileDimensions = document.getElementById('sharpenFileDimensions');
+        const sharpenIntensitySlider = document.getElementById('sharpenIntensitySlider');
+        const sharpenIntensityValue = document.getElementById('sharpenIntensityValue');
+        const sharpenRadiusSlider = document.getElementById('sharpenRadiusSlider');
+        const sharpenRadiusValue = document.getElementById('sharpenRadiusValue');
+        const sharpenFormatOptions = document.querySelectorAll('#sharpen-page .format-option');
+        const sharpenResult = document.getElementById('sharpenResult');
+        const sharpenDownloadBtn = document.getElementById('sharpenDownloadBtn');
+        
+        let sharpenOriginalImageData = null;
+        let sharpenOriginalFileSize = 0;
+        let sharpenSelectedFormat = 'jpeg';
+        
+        // Event Listeners untuk halaman sharpen
+        sharpenBrowseBtn.addEventListener('click', () => sharpenFileInput.click());
+        sharpenUploadArea.addEventListener('click', () => sharpenFileInput.click());
+        sharpenUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            sharpenUploadArea.style.backgroundColor = '#f0f0ff';
+        });
+        sharpenUploadArea.addEventListener('dragleave', () => {
+            sharpenUploadArea.style.backgroundColor = '';
+        });
+        sharpenUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            sharpenUploadArea.style.backgroundColor = '';
+            if (e.dataTransfer.files.length) {
+                handleSharpenFile(e.dataTransfer.files[0]);
+            }
+        });
+        sharpenFileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleSharpenFile(e.target.files[0]);
+            }
+        });
+        
+        sharpenIntensitySlider.addEventListener('input', () => {
+            sharpenIntensityValue.textContent = sharpenIntensitySlider.value;
+        });
+        
+        sharpenRadiusSlider.addEventListener('input', () => {
+            sharpenRadiusValue.textContent = sharpenRadiusSlider.value;
+        });
+        
+        sharpenFormatOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                sharpenFormatOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                sharpenSelectedFormat = option.getAttribute('data-format');
+            });
+        });
+        
+        sharpenBtn.addEventListener('click', sharpenImage);
+        
+        function handleSharpenFile(file) {
+            if (!file.type.match('image.*')) {
+                alert('Silakan pilih file gambar (JPG, PNG, GIF, dll.)');
+                return;
+            }
+            
+            if (file.size > 10 * 1024 * 1024) {
+                alert('Ukuran file terlalu besar. Maksimal 10MB.');
+                return;
+            }
+            
+            sharpenOriginalFileSize = file.size;
+            
+            sharpenFileName.textContent = file.name;
+            sharpenFileSize.textContent = formatFileSize(file.size);
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    sharpenFileDimensions.textContent = `${img.width} × ${img.height} px`;
+                    sharpenOriginalImage.src = e.target.result;
+                    sharpenOriginalImage.style.display = 'block';
+                    sharpenOriginalPlaceholder.style.display = 'none';
+                    sharpenOriginalImageData = img;
+                    
+                    sharpenBtn.disabled = false;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function sharpenImage() {
+            if (!sharpenOriginalImageData) return;
+            
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = sharpenOriginalImageData.width;
+            canvas.height = sharpenOriginalImageData.height;
+            
+            // Gambar gambar asli
+            ctx.drawImage(sharpenOriginalImageData, 0, 0);
+            
+            // Apply sharpen filter menggunakan convolution
+            const intensity = parseFloat(sharpenIntensitySlider.value);
+            const radius = parseFloat(sharpenRadiusSlider.value);
+            
+            applySharpenFilter(canvas, ctx, intensity, radius);
+            
+            let mimeType, fileExtension;
+            switch(sharpenSelectedFormat) {
+                case 'png':
+                    mimeType = 'image/png';
+                    fileExtension = 'png';
+                    break;
+                case 'jpeg':
+                default:
+                    mimeType = 'image/jpeg';
+                    fileExtension = 'jpg';
+                    break;
+            }
+            
+            const resultDataURL = canvas.toDataURL(mimeType, 0.9);
+            sharpenResultImage.src = resultDataURL;
+            sharpenResultImage.style.display = 'block';
+            sharpenResultPlaceholder.style.display = 'none';
+            
+            const originalName = sharpenFileName.textContent.split('.')[0];
+            sharpenDownloadBtn.href = resultDataURL;
+            sharpenDownloadBtn.download = `sharpened_${originalName}.${fileExtension}`;
+            
+            sharpenResult.style.display = 'block';
+        }
+        
+        function applySharpenFilter(canvas, ctx, intensity, radius) {
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Buat salinan data asli
+            const originalData = new Uint8ClampedArray(data);
+            
+            // Kernel sharpen (unsharp masking)
+            const kernel = [
+                [-1, -1, -1],
+                [-1,  9, -1],
+                [-1, -1, -1]
+            ];
+            
+            // Adjust kernel berdasarkan intensity
+            const center = 8 + intensity;
+            kernel[1][1] = center;
+            
+            // Terapkan kernel convolution
+            for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    let r = 0, g = 0, b = 0;
+                    
+                    for (let ky = -1; ky <= 1; ky++) {
+                        for (let kx = -1; kx <= 1; kx++) {
+                            const pixelIndex = ((y + ky) * width + (x + kx)) * 4;
+                            const weight = kernel[ky + 1][kx + 1];
+                            
+                            r += originalData[pixelIndex] * weight;
+                            g += originalData[pixelIndex + 1] * weight;
+                            b += originalData[pixelIndex + 2] * weight;
+                        }
+                    }
+                    
+                    const pixelIndex = (y * width + x) * 4;
+                    
+                    // Terapkan hasil dengan radius adjustment
+                    const blend = radius;
+                    data[pixelIndex] = Math.min(255, Math.max(0, 
+                        originalData[pixelIndex] * (1 - blend) + r * blend
+                    ));
+                    data[pixelIndex + 1] = Math.min(255, Math.max(0,
+                        originalData[pixelIndex + 1] * (1 - blend) + g * blend
+                    ));
+                    data[pixelIndex + 2] = Math.min(255, Math.max(0,
+                        originalData[pixelIndex + 2] * (1 - blend) + b * blend
+                    ));
+                }
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
         }
 
         // Fungsi utilitas untuk memformat ukuran file
