@@ -49,6 +49,35 @@
             margin: 0 auto;
         }
         
+        /* Style untuk header buttons */
+        .header-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .header-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
         nav {
             background-color: #f8f9fa;
             padding: 15px 0;
@@ -115,6 +144,42 @@
             flex: 1;
             min-width: 300px;
             padding: 20px;
+        }
+        
+        /* Style untuk link buttons di sidebar */
+        .link-buttons {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #6a11cb;
+        }
+        
+        .link-buttons h4 {
+            margin-bottom: 15px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .link-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: white;
+            color: #333;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .link-btn:hover {
+            border-color: #6a11cb;
+            background: #f0f4ff;
+            transform: translateX(5px);
         }
         
         .upload-area {
@@ -382,6 +447,60 @@
             font-size: 0.9rem;
         }
         
+        /* Style untuk footer buttons */
+        .footer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-btn {
+            padding: 8px 16px;
+            background: #e9ecef;
+            color: #666;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            border: 1px solid #dee2e6;
+        }
+        
+        .footer-btn:hover {
+            background: #2575fc;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Style untuk social buttons */
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #6a11cb;
+            color: white;
+            text-decoration: none;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        .social-btn:hover {
+            background: #2575fc;
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
         @media (max-width: 768px) {
             .upload-section {
                 border-right: none;
@@ -397,6 +516,16 @@
                 width: 100%;
                 justify-content: center;
             }
+            
+            .header-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .header-btn {
+                width: 200px;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -405,6 +534,18 @@
         <header>
             <h1>Tools Edit_Mas Eko</h1>
             <p class="subtitle">Kompresi, konversi, dan hapus background foto dengan mudah dan cepat</p>
+            <!-- Tombol Link di Header -->
+            <div class="header-buttons">
+                <a href="https://eanugroho-code.github.io/foto-geo/" target="_blank" class="header-btn">
+                    <span>⭐</span> Edit Geotaging
+                </a>
+                <a href="https://azco.biz.id/Azco_Maintenance/" class="header-btn">
+                    <span>❤️</span> Jajan di AzConnection
+                </a>
+                <a href="https://eanugroho-code.github.io/instruksifoto/" class="header-btn">
+                    <span>📚</span> instruksi-teknisi
+                </a>
+            </div>
         </header>
         
          <nav>
@@ -761,7 +902,22 @@
             </div>
         </div>
         
-        <footer>
+          <footer>
+            <!-- Tombol Link di Footer -->
+            <!-- <div class="footer-buttons">
+                <a href="privacy.html" class="footer-btn">🔒 Privasi</a>
+                <a href="terms.html" class="footer-btn">📄 Syarat</a>
+                <a href="about.html" class="footer-btn">ℹ️ Tentang</a>
+                <a href="sitemap.html" class="footer-btn">🗺️ Sitemap</a>
+            </div> -->
+            
+            <!-- Tombol Media Sosial -->
+            <!-- <div class="social-buttons">
+                <a href="https://facebook.com" target="_blank" class="social-btn">📘</a>
+                <a href="https://twitter.com" target="_blank" class="social-btn">🐦</a>
+                <a href="https://instagram.com" target="_blank" class="social-btn">📷</a>
+                <a href="https://youtube.com" target="_blank" class="social-btn">📺</a>
+            </div> -->
             <p>© 2025 tools edit - Yuk Bisa Yuk</p>
         </footer>
     </div>
