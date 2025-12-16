@@ -3,27 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tools Mas Eko - Kompresi & Konversi (PDF/HEIC/WebP → JPG)</title>
+    <title>Konversi PDF/HEIC/WebP → JPG</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; }
         body { background:linear-gradient(135deg,#6a11cb 0%,#2575fc 100%); color:#333; min-height:100vh; padding:20px; }
-        .container { max-width:1200px; margin:0 auto; background:white; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.2); overflow:hidden; }
+        .container { max-width:800px; margin:0 auto; background:white; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.2); overflow:hidden; }
         header { background:linear-gradient(to right,#2575fc,#6a11cb); color:white; padding:25px 20px; text-align:center; }
-        h1 { font-size:2.5rem; margin-bottom:10px; }
-        .subtitle { font-size:1.1rem; opacity:0.9; max-width:800px; margin:0 auto; }
-        .header-buttons { margin-top:20px; display:flex; justify-content:center; gap:15px; flex-wrap:wrap; }
-        .header-btn { display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:rgba(255,255,255,0.2); color:white; text-decoration:none; border-radius:25px; font-weight:600; transition:all .3s; border:2px solid rgba(255,255,255,0.3); }
-        .header-btn:hover { background:rgba(255,255,255,0.3); transform:translateY(-2px); box-shadow:0 5px 15px rgba(0,0,0,0.2); }
-        nav { background:#f8f9fa; padding:15px 0; border-bottom:1px solid #e0e0e0; }
-        .nav-container { display:flex; justify-content:center; flex-wrap:wrap; gap:10px; max-width:1000px; margin:0 auto; padding:0 20px; }
-        .nav-btn { padding:12px 25px; background:white; border:2px solid #e0e0e0; border-radius:8px; font-size:16px; font-weight:600; cursor:pointer; transition:all .3s; display:flex; align-items:center; gap:8px; }
-        .nav-btn:hover { border-color:#6a11cb; transform:translateY(-2px); }
-        .nav-btn.active { background:linear-gradient(to right,#2575fc,#6a11cb); color:white; border-color:#6a11cb; }
-        .page { display:none; padding:30px; }
-        .page.active { display:block; }
-        .main-content { display:flex; flex-wrap:wrap; }
-        .upload-section { flex:1; min-width:300px; padding:20px; border-right:1px solid #eee; }
-        .preview-section { flex:1; min-width:300px; padding:20px; }
+        h1 { font-size:2rem; margin-bottom:10px; }
+        .subtitle { font-size:1rem; opacity:0.9; margin:0 auto; }
+        .main-content { padding:30px; }
+        .upload-section { margin-bottom:20px; }
         .upload-area { border:2px dashed #6a11cb; border-radius:10px; padding:40px 20px; text-align:center; cursor:pointer; transition:all .3s; margin-bottom:20px; }
         .upload-area:hover { background:#f9f7ff; border-color:#2575fc; }
         .upload-icon { font-size:50px; color:#6a11cb; margin-bottom:15px; }
@@ -45,18 +34,15 @@
         .progress-bar { width:100%; height:20px; background:#e0e0e0; border-radius:10px; overflow:hidden; margin-bottom:10px; }
         .progress-fill { height:100%; background:linear-gradient(to right,#2575fc,#6a11cb); width:0%; transition:width .3s; }
         .progress-text { text-align:center; font-weight:600; color:#444; }
-        .multi-result { margin-top:20px; display:none; }
-        .download-all-btn { padding:12px 25px; background:linear-gradient(to right,#2575fc,#6a11cb); color:white; border:none; border-radius:5px; font-weight:600; cursor:pointer; }
         .file-list-container { margin-top:15px; max-height:200px; overflow-y:auto; border:1px solid #e0e0e0; border-radius:5px; padding:10px; background:white; }
         .file-item { padding:5px 0; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center; }
         .remove-file { background:#ff4d4d; color:white; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; font-size:12px; }
-        .file-list { margin-top:15px; max-height:150px; overflow-y:auto; border:1px solid #e0e0e0; border-radius:5px; padding:10px; background:white; }
+        .result-section { margin-top:20px; display:none; }
+        .success-message { background:#d4edda; color:#155724; padding:15px; border-radius:8px; margin-bottom:15px; text-align:center; }
+        .download-all-btn { padding:12px 25px; background:linear-gradient(to right,#2575fc,#6a11cb); color:white; border:none; border-radius:5px; font-weight:600; cursor:pointer; width:100%; }
+        .file-info { margin-top:15px; background:#f8f9fa; padding:15px; border-radius:8px; }
+        .info-row { display:flex; justify-content:space-between; margin-bottom:8px; }
         footer { text-align:center; padding:20px; background:#f8f9fa; color:#666; font-size:0.9rem; }
-        @media (max-width:768px){
-            .upload-section{border-right:none;border-bottom:1px solid #eee;}
-            .nav-container{flex-direction:column;align-items:center;}
-            .nav-btn{width:100%;justify-content:center;}
-        }
     </style>
     <!-- Library PDF.js & HEIC2ANY -->
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
@@ -65,414 +51,314 @@
 <body>
 <div class="container">
     <header>
-        <h1>Tools Mas Eko</h1>
-        <p class="subtitle">Kompresi 8 Foto + Konversi PDF/HEIC/WebP → JPG dengan mudah</p>
-        <div class="header-buttons">
-            <a href="https://eanugroho-code.github.io/foto-geo/" target="_blank" class="header-btn">Edit Geotaging</a>
-            <a href="https://azco.biz.id/Azco_Maintenance/" class="header-btn">Jajan di AzConnection</a>
-            <a href="https://eanugroho-code.github.io/instruksifoto/" class="header-btn">Instruksi Teknisi</a>
-        </div>
+        <h1>Konversi PDF/HEIC/WebP → JPG</h1>
+        <p class="subtitle">Konversi file Anda dengan mudah ke format JPG atau PNG</p>
     </header>
 
-    <nav>
-        <div class="nav-container">
-            <button class="nav-btn active" data-page="compress">Kompresi 8 Foto</button>
-            <button class="nav-btn" data-page="convert">Konversi ke JPG (PDF/HEIC/WebP OK)</button>
+    <div class="main-content">
+        <div class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <h3>Seret & Jatuhkan File di Sini</h3>
+                <p>Support: PDF, HEIC, WebP, dan gambar lainnya (maksimal 8 file)</p>
+                <button class="btn" id="browseBtn">Pilih File</button>
+                <input type="file" id="fileInput" class="file-input" accept="image/*,application/pdf,.heic,.heif" multiple>
+            </div>
+            <div class="controls">
+                <div class="control-group">
+                    <label for="qualitySlider">Kualitas JPG (%)</label>
+                    <div class="slider-container">
+                        <input type="range" id="qualitySlider" class="slider" min="10" max="100" value="90">
+                        <span id="qualityValue" class="slider-value">90%</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Format Output</label>
+                    <div class="format-options">
+                        <div class="format-option active" data-format="jpeg">JPG</div>
+                        <div class="format-option" data-format="png">PNG</div>
+                    </div>
+                </div>
+                <button class="btn" id="convertBtn" disabled>Konversi Semua File</button>
+            </div>
+            <div class="file-list-section">
+                <h3>Daftar File</h3>
+                <div class="file-list-container" id="fileListContainer">
+                    <p>Belum ada file yang dipilih</p>
+                </div>
+            </div>
         </div>
-    </nav>
 
-    <!-- ====================== KOMPRESI 8 FOTO ====================== -->
-    <div class="page active" id="compress-page">
-        <div class="main-content">
-            <div class="upload-section">
-                <div class="upload-area" id="compressUploadArea">
-                    <div class="upload-icon">Folder</div>
-                    <h3>Seret & Jatuhkan Foto di Sini</h3>
-                    <p>atau</p>
-                    <button class="btn" id="compressBrowseBtn">Pilih File (Maksimal 8)</button>
-                    <input type="file" id="compressFileInput" class="file-input" accept="image/*" multiple>
-                </div>
-                <div class="controls">
-                    <p>Kompresi otomatis: 6 foto pertama < 140 KB, 2 dokumen terakhir < 200 KB, format JPG.</p>
-                    <button class="btn" id="compressBtn" disabled>Kompres Semua Foto</button>
-                </div>
-                <div class="multi-file-controls">
-                    <h3>Daftar File</h3>
-                    <div class="file-list-container" id="fileListContainer"><p>Belum ada file yang dipilih</p></div>
-                </div>
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
             </div>
-            <div class="preview-section">
-                <div class="progress-container" id="compressProgressContainer">
-                    <div class="progress-bar"><div class="progress-fill" id="compressProgressFill"></div></div>
-                    <div class="progress-text" id="compressProgressText">Memproses: 0%</div>
-                </div>
-                <div class="file-info">
-                    <div class="info-row"><span class="info-label">Total File:</span><span id="compressTotalFiles" class="info-value">0</span></div>
-                    <div class="info-row"><span class="info-label">Diproses:</span><span id="compressProcessedFiles" class="info-value">0</span></div>
-                </div>
-                <div class="file-list" id="fileList" style="display:none;"><h4>Detail Hasil:</h4><div id="fileListContent"></div></div>
-                <div class="multi-result" id="compressResult">
-                    <div class="success-message">Kompresi Selesai!</div>
-                    <button class="download-all-btn" id="compressDownloadBtn">Unduh Semua (ZIP Nanti)</button>
-                </div>
+            <div class="progress-text" id="progressText">Memproses: 0%</div>
+        </div>
+
+        <div class="file-info" id="fileInfo" style="display:none;">
+            <div class="info-row">
+                <span class="info-label">Total File:</span>
+                <span id="totalFiles" class="info-value">0</span>
             </div>
+            <div class="info-row">
+                <span class="info-label">Diproses:</span>
+                <span id="processedFiles" class="info-value">0</span>
+            </div>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <div class="success-message">Konversi Selesai!</div>
+            <button class="download-all-btn" id="downloadBtn">Unduh Semua File</button>
         </div>
     </div>
 
-    <!-- ====================== KONVERSI KE JPG (PDF/HEIC/WebP) ====================== -->
-    <div class="page" id="convert-page">
-        <div class="main-content">
-            <div class="upload-section">
-                <div class="upload-area" id="convertUploadArea">
-                    <div class="upload-icon">Convert</div>
-                    <h3>Seret & Jatuhkan File (max 8)</h3>
-                    <p>Support: Gambar, PDF, HEIC, WebP → JPG/PNG</p>
-                    <button class="btn" id="convertBrowseBtn">Pilih File</button>
-                    <input type="file" id="convertFileInput" class="file-input" accept="image/*,application/pdf,.heic,.heif" multiple>
-                </div>
-                <div class="controls">
-                    <div class="control-group">
-                        <label for="convertQualitySlider">Kualitas JPG (%)</label>
-                        <div class="slider-container">
-                            <input type="range" id="convertQualitySlider" class="slider" min="10" max="100" value="90">
-                            <span id="convertQualityValue" class="slider-value">90%</span>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label>Format Output</label>
-                        <div class="format-options">
-                            <div class="format-option active" data-format="jpeg">JPG</div>
-                            <div class="format-option" data-format="png">PNG</div>
-                        </div>
-                    </div>
-                    <button class="btn" id="convertBtn" disabled>Konversi Semua File</button>
-                </div>
-                <div class="multi-file-controls">
-                    <h3>Daftar File</h3>
-                    <div class="file-list-container" id="convertFileListContainer"><p>Belum ada file yang dipilih</p></div>
-                </div>
-            </div>
-            <div class="preview-section">
-                <div class="progress-container" id="convertProgressContainer">
-                    <div class="progress-bar"><div class="progress-fill" id="convertProgressFill"></div></div>
-                    <div class="progress-text" id="convertProgressText">Memproses: 0%</div>
-                </div>
-                <div class="file-info">
-                    <div class="info-row"><span class="info-label">Total File:</span><span id="convertTotalFiles" class="info-value">0</span></div>
-                    <div class="info-row"><span class="info-label">Diproses:</span><span id="convertProcessedFiles" class="info-value">0</span></div>
-                </div>
-                <div class="file-list" id="convertFileList" style="display:none;">
-                    <h4>Hasil Konversi:</h4>
-                    <div id="convertFileListContent"></div>
-                </div>
-                <div class="multi-result" id="convertResult">
-                    <div class="success-message">Konversi Selesai!</div>
-                    <button class="download-all-btn" id="convertDownloadBtn">Unduh Semua File</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <footer><p>© 2025 Tools Mas Eko - Yuk Bisa Yuk</p></footer>
+    <footer>
+        <p>© 2025 - Konversi PDF/HEIC/WebP → JPG</p>
+    </footer>
 </div>
 
 <script>
-/* ==================== NAVIGASI ==================== */
-document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', function(){
-        document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-        this.classList.add('active');
-        document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-        document.getElementById(this.dataset.page + '-page').classList.add('active');
-    });
-});
-
-/* ==================== UTILITAS ==================== */
-function formatFileSize(bytes){
-    if(bytes<1024) return bytes+' B';
-    if(bytes<1048576) return (bytes/1024).toFixed(1)+' KB';
-    return (bytes/1048576).toFixed(1)+' MB';
-}
-
-/* ==================== KOMPRESI 8 FOTO (tetap sama) ==================== */
-const compressUploadArea = document.getElementById('compressUploadArea');
-const compressFileInput = document.getElementById('compressFileInput');
-const compressBrowseBtn = document.getElementById('compressBrowseBtn');
-const compressBtn = document.getElementById('compressBtn');
+// Elemen DOM
+const uploadArea = document.getElementById('uploadArea');
+const fileInput = document.getElementById('fileInput');
+const browseBtn = document.getElementById('browseBtn');
+const convertBtn = document.getElementById('convertBtn');
+const qualitySlider = document.getElementById('qualitySlider');
+const qualityValue = document.getElementById('qualityValue');
+const formatOptions = document.querySelectorAll('.format-option');
 const fileListContainer = document.getElementById('fileListContainer');
-const compressProgressContainer = document.getElementById('compressProgressContainer');
-const compressProgressFill = document.getElementById('compressProgressFill');
-const compressProgressText = document.getElementById('compressProgressText');
-const compressTotalFiles = document.getElementById('compressTotalFiles');
-const compressProcessedFiles = document.getElementById('compressProcessedFiles');
-const compressResult = document.getElementById('compressResult');
-const compressDownloadBtn = document.getElementById('compressDownloadBtn');
-const fileList = document.getElementById('fileList');
-const fileListContent = document.getElementById('fileListContent');
+const progressContainer = document.getElementById('progressContainer');
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+const fileInfo = document.getElementById('fileInfo');
+const totalFiles = document.getElementById('totalFiles');
+const processedFiles = document.getElementById('processedFiles');
+const resultSection = document.getElementById('resultSection');
+const downloadBtn = document.getElementById('downloadBtn');
 
-let compressFiles = [], compressedFiles = [], fileDetails = [], totalOriginal = 0, totalCompressed = 0;
+// Variabel
+let files = [];
+let convertedBlobs = [];
+let outputFormat = 'jpeg';
 
-compressBrowseBtn.onclick = () => compressFileInput.click();
-compressUploadArea.onclick = () => compressFileInput.click();
-compressUploadArea.ondragover = e=> {e.preventDefault(); compressUploadArea.style.backgroundColor='#f0f0ff';};
-compressUploadArea.ondragleave = () => compressUploadArea.style.backgroundColor='';
-compressUploadArea.ondrop = e=> {e.preventDefault(); compressUploadArea.style.backgroundColor=''; handleCompressFiles(e.dataTransfer.files);};
-compressFileInput.onchange = e=> handleCompressFiles(e.target.files);
-compressBtn.onclick = compressImages;
-compressDownloadBtn.onclick = () => {
-    alert('Fitur ZIP belum aktif. File akan di-download satu per satu.');
-    compressedFiles.forEach(f=>{
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(f);
-        a.download = f.name;
-        a.click();
-        URL.revokeObjectURL(a.href);
-    });
+// Event Listeners
+browseBtn.onclick = () => fileInput.click();
+uploadArea.onclick = () => fileInput.click();
+
+uploadArea.ondragover = (e) => {
+    e.preventDefault();
+    uploadArea.style.backgroundColor = '#f0f0ff';
 };
 
-function handleCompressFiles(files){
-    const newFiles = Array.from(files).filter(f=>f.type.startsWith('image/'));
-    if(compressFiles.length + newFiles.length > 8){
-        alert('Maksimal 8 file sekaligus!');
-        newFiles.splice(0, newFiles.length - (8 - compressFiles.length));
-    }
-    compressFiles.push(...newFiles);
-    displayCompressList();
-    compressTotalFiles.textContent = compressFiles.length;
-    compressBtn.disabled = compressFiles.length===0;
+uploadArea.ondragleave = () => {
+    uploadArea.style.backgroundColor = '';
+};
+
+uploadArea.ondrop = (e) => {
+    e.preventDefault();
+    uploadArea.style.backgroundColor = '';
+    handleFiles(e.dataTransfer.files);
+};
+
+fileInput.onchange = (e) => handleFiles(e.target.files);
+qualitySlider.oninput = () => qualityValue.textContent = qualitySlider.value + '%';
+
+formatOptions.forEach(option => {
+    option.onclick = () => {
+        formatOptions.forEach(x => x.classList.remove('active'));
+        option.classList.add('active');
+        outputFormat = option.dataset.format;
+    };
+});
+
+convertBtn.onclick = startConversion;
+downloadBtn.onclick = downloadConverted;
+
+// Fungsi Utilitas
+function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
 }
-function displayCompressList(){
+
+// Handle File Selection
+function handleFiles(fileList) {
+    const arr = Array.from(fileList);
+    
+    if (files.length + arr.length > 8) {
+        alert('Maksimal 8 file sekaligus!');
+        arr.splice(0, arr.length - (8 - files.length));
+    }
+    
+    files.push(...arr);
+    updateFileList();
+    totalFiles.textContent = files.length;
+    convertBtn.disabled = files.length === 0;
+    fileInfo.style.display = 'block';
+}
+
+function updateFileList() {
     fileListContainer.innerHTML = '';
-    compressFiles.forEach((f,i)=>{
+    
+    if (files.length === 0) {
+        fileListContainer.innerHTML = '<p>Belum ada file yang dipilih</p>';
+        return;
+    }
+    
+    files.forEach((file, index) => {
         const div = document.createElement('div');
-        div.className='file-item';
-        div.innerHTML = `<div class="file-name">${f.name}</div><div class="file-size">${formatFileSize(f.size)}</div><button class="remove-file" data-index="${i}">×</button>`;
+        div.className = 'file-item';
+        div.innerHTML = `
+            <div class="file-name">${file.name}</div>
+            <div class="file-size">${formatFileSize(file.size)}</div>
+            <button class="remove-file" data-index="${index}">×</button>
+        `;
         fileListContainer.appendChild(div);
     });
-    document.querySelectorAll('#fileListContainer .remove-file').forEach(b=>{
-        b.onclick = function(){
-            const idx = +this.dataset.index;
-            compressFiles.splice(idx,1);
-            displayCompressList();
-            compressTotalFiles.textContent = compressFiles.length;
-            compressBtn.disabled = compressFiles.length===0;
+    
+    document.querySelectorAll('.remove-file').forEach(button => {
+        button.onclick = function() {
+            const index = parseInt(this.dataset.index);
+            files.splice(index, 1);
+            updateFileList();
+            totalFiles.textContent = files.length;
+            convertBtn.disabled = files.length === 0;
+            
+            if (files.length === 0) {
+                fileInfo.style.display = 'none';
+            }
         };
     });
 }
-async function compressImages(){
-    if(!compressFiles.length) return;
-    compressProgressContainer.style.display='block';
-    compressResult.style.display='none';
-    compressedFiles=[]; fileDetails=[]; totalOriginal=0; totalCompressed=0;
-    let done=0;
-    for(let i=0;i<compressFiles.length;i++){
-        const file = compressFiles[i];
-        totalOriginal += file.size;
-        const target = i<6 ? 140*1024 : 200*1024;
-        const result = await compressSingleSingle(file, target);
-        compressedFiles.push(result.file);
-        fileDetails.push({name:file.name, orig:file.size, comp:result.file.size});
-        totalCompressed += result.file.size;
-        done++;
-        compressProcessedFiles.textContent=done;
-        const pct = (done/compressFiles.length)*100;
-        compressProgressFill.style.width=pct+'%';
-        compressProgressText.textContent=`Memproses: ${Math.round(pct)}%`;
-    }
-    fileListContent.innerHTML='';
-    fileDetails.forEach(d=>{
-        const div=document.createElement('div');
-        div.className='file-item';
-        div.innerHTML=`<div class="file-name">${d.name}</div>
-            <div><span class="file-size">${formatFileSize(d.orig)} → ${formatFileSize(d.comp)}</span></div>`;
-        fileListContent.appendChild(div);
-    });
-    fileList.style.display='block';
-    compressResult.style.display='block';
-    compressProgressContainer.style.display='none';
-}
-function compressSingle(file, target){
-    return new Promise((res,rej)=>{
-        const reader=new FileReader();
-        reader.onload=e=>{
-            const img=new Image();
-            img.onload=()=>{
-                const canvas=document.createElement('canvas');
-                const ctx=canvas.getContext('2d');
-                const maxW=1200;
-                let w=img.width, h=img.height;
-                if(w>maxW){ h=h*maxW/w; w=maxW; }
-                canvas.width=w; canvas.height=h;
-                ctx.drawImage(img,0,0,w,h);
-                let q=0.95;
-                let blob;
-                while(q>=0.1){
-                    canvas.toBlob(b=>blob=b,'image/jpeg',q);
-                    if(blob && blob.size<target) break;
-                    q-=0.05;
-                }
-                if(!blob) canvas.toBlob(b=>blob=b,'image/jpeg',0.1);
-                const newName = file.name.replace(/\.[^.]+$/,'')+'.jpg';
-                res({file:new File([blob],newName,{type:'image/jpeg'})});
-            };
-            img.src=e.target.result;
-        };
-        reader.readAsDataURL(file);
-    });
-}
 
-/* ==================== KONVERSI KE JPG (PDF/HEIC/WebP) ==================== */
-const convertUploadArea = document.getElementById('convertUploadArea');
-const convertFileInput = document.getElementById('convertFileInput');
-const convertBrowseBtn = document.getElementById('convertBrowseBtn');
-const convertBtn = document.getElementById('convertBtn');
-const convertQualitySlider = document.getElementById('convertQualitySlider');
-const convertQualityValue = document.getElementById('convertQualityValue');
-const convertFormatOptions = document.querySelectorAll('#convert-page .format-option');
-const convertFileListContainer = document.getElementById('convertFileListContainer');
-const convertProgressContainer = document.getElementById('convertProgressContainer');
-const convertProgressFill = document.getElementById('convertProgressFill');
-const convertProgressText = document.getElementById('convertProgressText');
-const convertTotalFiles = document.getElementById('convertTotalFiles');
-const convertProcessedFiles = document.getElementById('convertProcessedFiles');
-const convertResult = document.getElementById('convertResult');
-const convertDownloadBtn = document.getElementById('convertDownloadBtn');
-const convertFileListContent = document.getElementById('convertFileListContent');
-
-let convertFiles = [], convertedBlobs = [], convertFormat = 'jpeg';
-
-convertBrowseBtn.onclick = () => convertFileInput.click();
-convertUploadArea.onclick = () => convertFileInput.click();
-convertUploadArea.ondragover = e=>{e.preventDefault();convertUploadArea.style.backgroundColor='#f0f0ff';};
-convertUploadArea.ondragleave = () => convertUploadArea.style.backgroundColor='';
-convertUploadArea.ondrop = e=>{e.preventDefault();convertUploadArea.style.backgroundColor='';handleConvertFiles(e.dataTransfer.files);};
-convertFileInput.onchange = e=>handleConvertFiles(e.target.files);
-convertQualitySlider.oninput = () => convertQualityValue.textContent = convertQualitySlider.value+'%';
-convertFormatOptions.forEach(o=>o.onclick=()=>{
-    convertFormatOptions.forEach(x=>x.classList.remove('active'));
-    o.classList.add('active');
-    convertFormat = o.dataset.format;
-});
-convertBtn.onclick = startConvert;
-convertDownloadBtn.onclick = downloadConverted;
-
-function handleConvertFiles(fileList){
-    const arr = Array.from(fileList);
-    if(convertFiles.length + arr.length > 8){
-        alert('Maksimal 8 file sekaligus!');
-        arrsplice(0, arr.length-(8-convertFiles.length));
-    }
-    convertFiles.push(...arr);
-    showConvertList();
-    convertTotalFiles.textContent = convertFiles.length;
-    convertBtn.disabled = convertFiles.length===0;
-}
-function showConvertList(){
-    convertFileListContainer.innerHTML='';
-    convertFiles.forEach((f,i)=>{
-        const div=document.createElement('div');
-        div.className='file-item';
-        div.innerHTML=`<div class="file-name">${f.name}</div>
-                       <div class="file-size">${formatFileSize(f.size)}</div>
-                       <button class="remove-file" data-index="${i}">×</button>`;
-        convertFileListContainer.appendChild(div);
-    });
-    document.querySelectorAll('#convertFileListContainer .remove-file').forEach(b=>{
-        b.onclick=function(){
-            convertFiles.splice(+this.dataset.index,1);
-            showConvertList();
-            convertTotalFiles.textContent=convertFiles.length;
-            convertBtn.disabled=convertFiles.length===0;
-        };
-    });
-}
-async function startConvert(){
-    if(!convertFiles.length) return;
-    convertProgressContainer.style.display='block';
-    convertResult.style.display='none';
-    convertedBlobs=[];
-    let done=0;
-    for(const file of convertFiles){
-        try{
-            const res = await convertOne(file);
-            convertedBlobs.push(...res);
-        }catch(e){
-            console.error(e);
-            convertedBlobs.push({blob:file, name:file.name});
+// Konversi File
+async function startConversion() {
+    if (!files.length) return;
+    
+    progressContainer.style.display = 'block';
+    resultSection.style.display = 'none';
+    convertedBlobs = [];
+    
+    let processed = 0;
+    
+    for (const file of files) {
+        try {
+            const results = await convertFile(file);
+            convertedBlobs.push(...results);
+        } catch (error) {
+            console.error('Error converting file:', error);
+            convertedBlobs.push({
+                blob: file,
+                name: file.name
+            });
         }
-        done++;
-        convertProcessedFiles.textContent=done;
-        const pct=(done/convertFiles.length)*100;
-        convertProgressFill.style.width=pct+'%';
-        convertProgressText.textContent=`Memproses: ${Math.round(pct)}%`;
+        
+        processed++;
+        processedFiles.textContent = processed;
+        
+        const progress = (processed / files.length) * 100;
+        progressFill.style.width = progress + '%';
+        progressText.textContent = `Memproses: ${Math.round(progress)}%`;
     }
-    showResultList();
-    convertResult.style.display='block';
-    convertProgressContainer.style.display='none';
+    
+    progressContainer.style.display = 'none';
+    resultSection.style.display = 'block';
 }
-async function convertOne(file){
-    const quality = convertQualitySlider.value/100;
-    const mime = convertFormat==='jpeg'?'image/jpeg':'image/png';
-    const ext = convertFormat==='jpeg'?'jpg':'png';
 
-    // PDF
-    if(file.type==='application/pdf'){
+async function convertFile(file) {
+    const quality = qualitySlider.value / 100;
+    const mime = outputFormat === 'jpeg' ? 'image/jpeg' : 'image/png';
+    const ext = outputFormat === 'jpeg' ? 'jpg' : 'png';
+    
+    // Konversi PDF
+    if (file.type === 'application/pdf') {
         const arr = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({data:arr}).promise;
-        const out=[];
-        for(let i=1;i<=pdf.numPages;i++){
-            const page=await pdf.getPage(i);
-            const vp=page.getViewport({scale:2});
-            const canvas=document.createElement('canvas');
-            canvas.width=vp.width; canvas.height=vp.height;
-            await page.render({canvasContext:canvas.getContext('2d'), viewport:vp}).promise;
-            const blob=await new Promise(r=>canvas.toBlob(r,mime,convertFormat==='jpeg'?quality:1));
-            const name=file.name.replace(/\.pdf$/i,'')+`_hal_${i}.${ext}`;
-            out.push({blob,name});
+        const pdf = await pdfjsLib.getDocument({ data: arr }).promise;
+        const results = [];
+        
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const viewport = page.getViewport({ scale: 2 });
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            
+            await page.render({
+                canvasContext: canvas.getContext('2d'),
+                viewport: viewport
+            }).promise;
+            
+            const blob = await new Promise(resolve => {
+                canvas.toBlob(resolve, mime, outputFormat === 'jpeg' ? quality : 1);
+            });
+            
+            const name = file.name.replace(/\.pdf$/i, '') + `_halaman_${i}.${ext}`;
+            results.push({ blob, name });
         }
-        return out;
+        
+        return results;
     }
-
-    // HEIC
-    if(file.type==='image/heic' || file.type==='image/heif' || /\.(heic|heif)$/i.test(file.name)){
-        const conv = await heic2any({blob:file, toType:mime, quality});
-        const blob = Array.isArray(conv)?conv[0]:conv;
-        const name = file.name.replace(/\.(heic|heif)$/i,'')+'.'+ext;
-        return [{blob, name}];
+    
+    // Konversi HEIC/HEIF
+    if (file.type === 'image/heic' || file.type === 'image/heif' || /\.(heic|heif)$/i.test(file.name)) {
+        const converted = await heic2any({
+            blob: file,
+            toType: mime,
+            quality: quality
+        });
+        
+        const blob = Array.isArray(converted) ? converted[0] : converted;
+        const name = file.name.replace(/\.(heic|heif)$/i, '') + '.' + ext;
+        
+        return [{ blob, name }];
     }
-
-    // Gambar biasa / WebP
-    const img=new Image();
-    const url=URL.createObjectURL(file);
-    await new Promise((r,e)=>{img.onload=r; img.onerror=e; img.src=url;});
-    const canvas=document.createElement('canvas');
-    canvas.width=img.width; canvas.height=img.height;
-    canvas.getContext('2d').drawImage(img,0,0);
-    const blob=await new Promise(r=>canvas.toBlob(r,mime,convertFormat==='jpeg'?quality:1));
-    URL.revokeObjectURL(url);
-    let name=file.name.split('.').slice(0,-1).join('.');
-    if(!name) name='gambar';
-    name+='.'+ext;
-    return [{blob, name}];
-}
-function showResultList(){
-    convertFileListContent.innerHTML='';
-    convertedBlobs.forEach(item=>{
-        const div=document.createElement('div');
-        div.className='file-item';
-        div.innerHTML=`<div class="file-name">${item.name}</div>
-                       <div class="file-size">${formatFileSize(item.blob.size)}</div>`;
-        convertFileListContent.appendChild(div);
+    
+    // Konversi gambar biasa (WebP, PNG, JPG, dll)
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    
+    await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+        img.src = url;
     });
-    convertFileListContent.parentElement.style.display='block';
+    
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    
+    const blob = await new Promise(resolve => {
+        canvas.toBlob(resolve, mime, outputFormat === 'jpeg' ? quality : 1);
+    });
+    
+    URL.revokeObjectURL(url);
+    
+    let name = file.name.split('.').slice(0, -1).join('.');
+    if (!name) name = 'gambar';
+    name += '.' + ext;
+    
+    return [{ blob, name }];
 }
-function downloadConverted(){
-    if(!convertedBlobs.length) return alert('Belum ada hasil konversi.');
-    convertedBlobs.forEach(item=>{
-        const a=document.createElement('a');
-        a.href=URL.createObjectURL(item.blob);
-        a.download=item.name;
+
+// Download Hasil
+function downloadConverted() {
+    if (!convertedBlobs.length) {
+        alert('Belum ada hasil konversi.');
+        return;
+    }
+    
+    convertedBlobs.forEach(item => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(item.blob);
+        a.download = item.name;
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
         URL.revokeObjectURL(a.href);
     });
 }
